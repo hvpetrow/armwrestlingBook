@@ -1,0 +1,20 @@
+<li>
+  <div class="owner-info">
+    <span class="owner">{{ comments[commentId].ownerEmail }}</span>
+  </div>
+  <div class="comment-content">
+    <div class="comment">
+      <p>
+        {{ comments[commentId].content }}
+      </p>
+      <div class="right-side">
+        <ng-container *ngIf="user && isOwner">
+          <button (click)="deleteHandler()" class="delete-btn">Delete</button>
+        </ng-container>
+        <span class="timestamp">{{
+          comments[commentId].createdAt | dateTransform | date : "medium"
+        }}</span>
+      </div>
+    </div>
+  </div>
+</li>

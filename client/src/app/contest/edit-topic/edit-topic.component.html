@@ -1,0 +1,85 @@
+<section class="createPage">
+  <form (ngSubmit)="onSubmit()" [formGroup]="editTopicForm">
+    <fieldset>
+      <legend>Edit Topic</legend>
+      <div class="container">
+        <label for="title" class="vhide">Title</label>
+        <input
+          formControlName="title"
+          id="title"
+          name="title"
+          class="name"
+          type="text"
+          placeholder="Title"
+          [ngClass]="{
+            'input-error':
+              editTopicForm.controls['title'].invalid &&
+              editTopicForm.controls['title'].touched
+          }"
+        />
+        <div
+          *ngIf="
+    editTopicForm.controls['title'].errors?.['required'] &&
+    editTopicForm.controls['title'].touched
+  "
+          class="alert-error"
+        >
+          Title is required!
+        </div>
+
+        <label for="photoUrl" class="vhide">PhotoUrl</label>
+        <input
+          formControlName="photoUrl"
+          id="photoUrl"
+          name="photoUrl"
+          class="name"
+          type="text"
+          placeholder="http:..."
+          [ngClass]="{
+            'input-error':
+              editTopicForm.controls['photoUrl'].invalid &&
+              editTopicForm.controls['photoUrl'].touched
+          }"
+        />
+        <div
+          *ngIf="
+    editTopicForm.controls['photoUrl'].errors?.['required'] &&
+    editTopicForm.controls['photoUrl'].touched
+  "
+          class="alert-error"
+        >
+          PhotoUrl is required!
+        </div>
+
+        <label for="description" class="vhide">Description</label>
+        <textarea
+          formControlName="description"
+          name="description"
+          class="description"
+          placeholder="Description"
+          [ngClass]="{
+            'input-error':
+              editTopicForm.controls['description'].invalid &&
+              editTopicForm.controls['description'].touched
+          }"
+        ></textarea>
+        <div
+          *ngIf="
+  editTopicForm.controls['description'].errors?.['required'] &&
+  editTopicForm.controls['description'].touched
+  "
+          class="alert-error"
+        >
+          Description is required!
+        </div>
+        <button
+          [disabled]="editTopicForm.invalid"
+          class="edit-album"
+          type="submit"
+        >
+          Submit
+        </button>
+      </div>
+    </fieldset>
+  </form>
+</section>

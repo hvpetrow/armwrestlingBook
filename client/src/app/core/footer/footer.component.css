@@ -1,0 +1,22 @@
+footer {
+  background-color: #383838;
+  width: 100%;
+  display: flex;
+  font-size: 1.2rem;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 0;
+  padding: 0rem 4rem 0 3rem;
+  margin: 0%;
+  height: 60px;
+  bottom: 0;
+  position: fixed;
+  height: 60px;
+  color: #fff;
+}
+
+body::after {
+  content: "";
+  display: block;
+  height: 60px; /* Set same as footer's height */
+}

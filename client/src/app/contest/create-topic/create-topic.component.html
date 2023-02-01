@@ -1,0 +1,85 @@
+<section class="createPage">
+  <form (ngSubmit)="onSubmit()" [formGroup]="createContestForm">
+    <fieldset>
+      <legend>Add Topic</legend>
+      <div class="container">
+        <label for="title" class="vhide">Title</label>
+        <input
+          formControlName="title"
+          id="title"
+          name="title"
+          class="name"
+          type="text"
+          placeholder="Title"
+          [ngClass]="{
+            'input-error':
+              createContestForm.controls['title'].invalid &&
+              createContestForm.controls['title'].touched
+          }"
+        />
+        <div
+          *ngIf="
+  createContestForm.controls['title'].errors?.['required'] &&
+  createContestForm.controls['title'].touched
+"
+          class="alert-error"
+        >
+          Title is required!
+        </div>
+
+        <label for="photoUrl" class="vhide">PhotoUrl</label>
+        <input
+          formControlName="photoUrl"
+          id="photoUrl"
+          name="photoUrl"
+          class="name"
+          type="text"
+          placeholder="http:..."
+          [ngClass]="{
+            'input-error':
+              createContestForm.controls['photoUrl'].invalid &&
+              createContestForm.controls['photoUrl'].touched
+          }"
+        />
+        <div
+          *ngIf="
+  createContestForm.controls['photoUrl'].errors?.['required'] &&
+  createContestForm.controls['photoUrl'].touched
+"
+          class="alert-error"
+        >
+          PhotoUrl is required!
+        </div>
+
+        <label for="description" class="vhide">Description</label>
+        <textarea
+          formControlName="description"
+          name="description"
+          class="description"
+          placeholder="Description"
+          [ngClass]="{
+            'input-error':
+              createContestForm.controls['description'].invalid &&
+              createContestForm.controls['description'].touched
+          }"
+        ></textarea>
+        <div
+          *ngIf="
+createContestForm.controls['description'].errors?.['required'] &&
+createContestForm.controls['description'].touched
+"
+          class="alert-error"
+        >
+          Description is required!
+        </div>
+        <button
+          [disabled]="createContestForm.invalid"
+          class="add-album"
+          type="submit"
+        >
+          Submit
+        </button>
+      </div>
+    </fieldset>
+  </form>
+</section>

@@ -1,0 +1,102 @@
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+/>
+<div *ngIf="!!topic; else loader" class="details">
+  <div id="container">
+    <div class="product-details">
+      <h1>{{ topic.title }}</h1>
+      <p class="information">{{ topic.description }}</p>
+      <p class="likes-count">Likes: {{ topic.likes.length }}</p>
+
+      <div *ngIf="!isOwner && userId" class="like-buttons">
+        <button *ngIf="!hasLiked" (click)="likeHandler()" class="btn">
+          <span class="like">Like</span>
+        </button>
+        <button *ngIf="hasLiked" (click)="cancelLikeHandler()" class="btn">
+          <span class="unlike">Unlike</span>
+        </button>
+      </div>
+
+      <div *ngIf="isOwner" class="control">
+        <a routerLink="/topics/{{ topicId }}/edit">
+          <button class="btn">
+            <span class="buy">Edit</span>
+          </button>
+        </a>
+        <button class="btn">
+          <span class="delete" (click)="deleteHandler()">Delete</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="product-image">
+      <img src="{{ topic.photoUrl }}" alt="topic_Photo" />
+
+      <div class="info">
+        <h2>Additional Info</h2>
+        <ul>
+          <li><strong>Created by: </strong>{{ creatorEmail }}</li>
+          <li>
+            <strong>Published: </strong
+            >{{ topic.createdAt | dateTransform | date : "fullDate" }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <button (click)="toggleComments()" *ngIf="comments" class="comments_btn">
+    <span> Comments({{ objectKeys(comments).length }})</span>
+  </button>
+
+  <section id="comments">
+    <div class="comments-info">
+      <ul class="noBullet">
+        <ng-container *ngIf="isShowedComments">
+          <app-comments
+            *ngFor="let commentId of objectKeys(comments)"
+            [user]="user$ | async"
+            [comments]="comments"
+            [commentId]="commentId"
+            (deleteComment)="deleteComment($event)"
+          ></app-comments>
+        </ng-container>
+
+        <ng-container *ngIf="user$ | async">
+          <li>
+            <textarea
+              id="content"
+              class="inputFields"
+              name="content"
+              placeholder="..."
+              #comment="ngModel"
+              type="text"
+              name="comment"
+              ngModel
+              required
+              minlength="2"
+            ></textarea>
+          </li>
+
+          <li id="center-btn">
+            <button
+              [disabled]="comment.invalid"
+              (click)="postComment(comment)"
+              id="post-btn"
+            >
+              Post Comment
+            </button>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<ng-template #loader>
+  <div class="ring">
+    Loading
+    <span class="ring_span"></span>
+  </div>
+</ng-template>

@@ -1,0 +1,186 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:100,300,400,700);
+fieldset {
+  margin: 1em auto;
+  padding: 2em;
+  width: 25em;
+  border-radius: 10px;
+  border-color: #a8aeb5;
+  background: #383838;
+  box-shadow: 0 2px 2px #131518;
+}
+
+fieldset legend {
+  font-weight: 700;
+  font-size: 2em;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 0.5em;
+  color: white;
+  background: #383838;
+
+  border-width: 1px;
+  border-style: solid;
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+input,
+input + label > i,
+textarea {
+  border-radius: 3px;
+  box-shadow: none;
+  border: 1px solid #a8aeb5;
+  background: #383838;
+  display: block;
+  width: 100%;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+  font-size: 1.3em;
+  line-height: 1.3;
+  padding: 0.3em 0.4em;
+  margin: 1em 0.5em 0 0;
+}
+
+input[type="text"]::-webkit-input-placeholder,
+input[type="number"]::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+  color: #a8b0b9;
+  line-height: 1.2;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+input[type="text"]:hover,
+textarea:hover {
+  border-color: #bba007;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+  outline: none;
+  border-color: #a8aeb5;
+}
+
+textarea {
+  height: 150px;
+  font-family: "Lato";
+  color: #fff;
+}
+/* 
+.add-album,
+.edit-album {
+  width: 150px;
+  height: 50px;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  display: inline;
+  align-items: center;
+  justify-content: center;
+  background-color: #383838;
+  background-image: linear-gradient(315deg, #45a29e 0%, #0d324d 74%);
+  background-size: 200% 100%;
+  background-position: left;
+  background-repeat: no-repeat;
+  transition: 500ms;
+  color: white;
+  font-family: "Lato";
+  font-size: 20px;
+  margin-bottom: 5px;
+  margin-top: 20px;
+}
+
+.add-album:hover:enabled {
+  background-image: linear-gradient(315deg, #6eb9b6 10%, #214863 74%);
+} */
+
+.edit-album {
+  margin-top: 50px;
+  width: 100%;
+  background-color: #0c0e13;
+  color: #ffffff;
+  padding: 15px 0;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit-album:hover:enabled {
+  background-image: url("https://scottyzen.sirv.com/Images/v/button.png");
+  /* background-image: url("/client/src/assets/button.webp"); */
+  background-size: 100% 100%;
+  color: #0e0e0f;
+  animation: spring 300ms ease-out;
+  text-shadow: 0 -1px 0 #ef816c;
+  font-weight: bolder;
+  border: 2px solid;
+}
+
+.edit-album:active:enabled {
+  transform: translateY(4px);
+}
+
+.edit-album:disabled {
+  opacity: 0.5;
+}
+
+.createPage,
+.editPage {
+  font-family: "Lato";
+  font-size: 16px;
+  color: #aab2bd;
+  padding: 1em 0 10em;
+  margin: 0.5rem auto;
+  max-width: 800px;
+  height: auto;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.vhide {
+  opacity: 0;
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  overflow: hidden;
+}
+
+.alert-error {
+  color: #f33;
+  margin-bottom: 1em;
+  margin-top: 0.3em;
+  font-weight: bold;
+}
+
+.input-error {
+  border-color: #f33;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+textarea::-webkit-scrollbar {
+  width: 12px;
+  background-color: #383838;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #a8aeb5;
+}

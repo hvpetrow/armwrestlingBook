@@ -1,0 +1,148 @@
+<form (ngSubmit)="handleRegister()" [formGroup]="registerForm">
+  <h3>Register Here</h3>
+
+  <label for="email">Email</label>
+  <input
+    formControlName="email"
+    type="text"
+    placeholder="john.doe@gmail.com"
+    id="email"
+    [ngClass]="{
+      'input-error':
+        registerForm.controls['email'].invalid &&
+        registerForm.controls['email'].touched
+    }"
+  />
+
+  <div
+    [hidden]="
+      registerForm.controls['email'].valid ||
+      registerForm.controls['email'].pristine
+    "
+    class="alert-error"
+  >
+    Email should be valid!
+  </div>
+  <div
+    *ngIf="
+  registerForm.controls['email'].errors?.['required'] &&
+  registerForm.controls['email'].touched
+"
+    class="alert-error"
+  >
+    Email is required!
+  </div>
+
+  <label for="username">Username</label>
+  <input
+    formControlName="username"
+    type="text"
+    placeholder="username123"
+    id="username"
+    [ngClass]="{
+      'input-error':
+        registerForm.controls['username'].invalid &&
+        registerForm.controls['username'].touched
+    }"
+  />
+
+  <div
+    [hidden]="
+      registerForm.controls['username'].valid ||
+      registerForm.controls['username'].pristine
+    "
+    class="alert-error"
+  >
+    Username must be at least 3 characters long.
+  </div>
+  <div
+    *ngIf="
+    registerForm.controls['username'].errors?.['required'] &&
+    registerForm.controls['username'].touched
+  "
+    class="alert-error"
+  >
+    Username is required!
+  </div>
+  <div
+    *ngIf="
+    registerForm.controls['username'].errors?.['minLength'] &&
+    registerForm.controls['username'].touched
+  "
+    class="alert-error"
+  >
+    Username must be more than 2 characters long!
+  </div>
+
+  <label for="password">Password</label>
+  <input
+    formControlName="password"
+    type="password"
+    placeholder="******"
+    id="password"
+    [ngClass]="{
+      'input-error':
+        registerForm.controls['password'].invalid &&
+        registerForm.controls['password'].touched
+    }"
+  />
+
+  <div
+    [hidden]="
+      registerForm.controls['password'].valid ||
+      registerForm.controls['password'].pristine
+    "
+    class="alert-error"
+  >
+    Password must be between 6 and 16 symbols
+  </div>
+  <div
+    *ngIf="
+    registerForm.controls['password'].errors?.['required'] &&
+    registerForm.controls['password'].touched
+  "
+    class="alert-error"
+  >
+    Password is required!
+  </div>
+
+  <label for="repass">Re-Password</label>
+  <input
+    formControlName="repass"
+    type="password"
+    placeholder="******"
+    id="repass"
+    [ngClass]="{
+      'input-error':
+        registerForm.controls['repass'].invalid &&
+        registerForm.controls['repass'].touched
+    }"
+  />
+
+  <div
+    [hidden]="
+      registerForm.controls['repass'].valid ||
+      registerForm.controls['repass'].pristine
+    "
+    class="alert-error"
+  >
+    Both passwords must match
+  </div>
+  <div
+    *ngIf="
+    registerForm.controls['repass'].errors?.['required'] &&
+    registerForm.controls['repass'].touched
+  "
+    class="alert-error"
+  >
+    Repass is required!
+  </div>
+
+  <button [disabled]="registerForm.invalid" class="primary-btn">
+    Register
+  </button>
+
+  <div class="reg-link">
+    <a routerLink="/user/login">You have an account? Sign In now!</a>
+  </div>
+</form>

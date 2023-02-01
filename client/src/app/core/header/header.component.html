@@ -1,0 +1,22 @@
+<nav class="nav">
+  <ul>
+    <li><a routerLink="/">Home</a></li>
+    <li>
+      <a routerLink="/topics/all-topics">All Topics</a>
+    </li>
+    <li *ngIf="isLoggedIn$ | async">
+      <a routerLink="/user/my-topics">My Topics</a>
+    </li>
+    <li *ngIf="isLoggedIn$ | async">
+      <a routerLink="/topics/new">Add Topic</a>
+    </li>
+    <li *ngIf="!(isLoggedIn$ | async)">
+      <a routerLink="/user/login">Login</a>
+    </li>
+    <li *ngIf="!(isLoggedIn$ | async)">
+      <a routerLink="/user/register">Register</a>
+    </li>
+    <li><a routerLink="/topics/search">Search</a></li>
+    <li *ngIf="isLoggedIn$ | async"><a (click)="onLogout()">Logout</a></li>
+  </ul>
+</nav>

@@ -1,0 +1,71 @@
+<form (ngSubmit)="handleLogin()" [formGroup]="loginForm">
+  <h3>Login Here</h3>
+
+  <label for="email">Email</label>
+  <input
+    formControlName="email"
+    type="text"
+    placeholder="john.doe@gmail.com"
+    id="email"
+    [ngClass]="{
+      'input-error':
+        loginForm.controls['email'].invalid &&
+        loginForm.controls['email'].touched
+    }"
+  />
+
+  <div
+    [hidden]="
+      loginForm.controls['email'].valid || loginForm.controls['email'].pristine
+    "
+    class="alert-error"
+  >
+    Email should be valid!
+  </div>
+  <div
+    *ngIf="
+  loginForm.controls['email'].errors?.['required'] &&
+  loginForm.controls['email'].touched
+"
+    class="alert-error"
+  >
+    Email is required!
+  </div>
+
+  <label for="password">Password</label>
+  <input
+    formControlName="password"
+    type="password"
+    placeholder="******"
+    id="password"
+    [ngClass]="{
+      'input-error':
+        loginForm.controls['password'].invalid &&
+        loginForm.controls['password'].touched
+    }"
+  />
+  <div
+    [hidden]="
+      loginForm.controls['password'].valid ||
+      loginForm.controls['password'].pristine
+    "
+    class="alert-error"
+  >
+    Password should be more than 5 characters long!
+  </div>
+  <div
+    *ngIf="
+loginForm.controls['password'].errors?.['required'] &&
+loginForm.controls['password'].touched
+"
+    class="alert-error"
+  >
+    Password is required!
+  </div>
+
+  <button [disabled]="loginForm.invalid" class="primary-btn">Log In</button>
+
+  <div class="reg-link">
+    <a routerLink="/user/register">You don't have an account? Register now!</a>
+  </div>
+</form>

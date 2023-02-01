@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "armwrestlingbook": {
+      "hosting": {
+        "client": [
+          "armwrestlingbook"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "armwrestlingbook"
+  }
+}

@@ -1,0 +1,34 @@
+<section id="latest-topics" *ngIf="topics; else loader">
+  <h1 class="topics-represent">MY TOPICS...</h1>
+  <div *ngIf="objectKeys(topics).length > 0" class="cards-container">
+    <ul class="topics">
+      <li class="topic" *ngFor="let topic of objectKeys(topics)">
+        <div class="container">
+          <div class="card">
+            <div class="box">
+              <div class="content">
+                <h3>{{ topics[topic].title }}</h3>
+                <p>
+                  {{
+                    topics[topic].createdAt | dateTransform | date : "fullDate"
+                  }}
+                </p>
+                <a routerLink="/topics/{{ topic }}/details">Details</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="objectKeys(topics).length === 0" class="no-data-container">
+    <p class="no-data">There are not published topics...</p>
+  </div>
+</section>
+<ng-template #loader>
+  <div class="ring">
+    Loading
+    <span class="ring_span"></span>
+  </div>
+</ng-template>

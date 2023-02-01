@@ -1,0 +1,30 @@
+<div class="home-container">
+  <div class="info">
+    <h1>WELCOME TO THE WORLD OF ARMWRESTLING</h1>
+    <h2>ALL AROUND THE ARMWRESTLING IN ONE PLACE</h2>
+  </div>
+</div>
+
+<section *ngIf="topics; else loader" id="latest-topics">
+  <h1 class="topics-represent">LATEST TOPICS...</h1>
+  <div class="cards-container">
+    <ul *ngIf="objectKeys(topics).length > 0" class="topics">
+      <li class="topic" *ngFor="let topic of objectKeys(topics)">
+        <app-topic-card
+          [topicId]="topic"
+          [topic]="topics[topic]"
+        ></app-topic-card>
+      </li>
+    </ul>
+
+    <div *ngIf="objectKeys(topics).length === 0" class="no-data-container">
+      <p class="no-data">There are not published topics...</p>
+    </div>
+  </div>
+</section>
+<ng-template #loader>
+  <div class="ring">
+    Loading
+    <span class="ring_span"></span>
+  </div>
+</ng-template>
