@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, OnChanges, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { TopicService } from 'src/app/services/topic.service';

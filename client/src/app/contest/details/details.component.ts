@@ -1,10 +1,10 @@
-import { AfterContentInit, AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, OnChanges, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { arrayRemove, arrayUnion, collection, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { Firestore } from '@angular/fire/firestore';
+import { Observable, from } from 'rxjs';
 
-import { Topic } from 'src/app/interfaces/topic';
 import { AuthService } from 'src/app/services/auth.service';
 import { TopicService } from 'src/app/services/topic.service';
 import { NgControl } from '@angular/forms';
@@ -30,6 +30,7 @@ export class DetailsComponent implements OnInit {
   commentCount: any;
   isShowedComments: boolean = false;
 
+
   constructor(private activatedRoute: ActivatedRoute, private authService: AuthService, public firestore: Firestore, private topicService: TopicService, private router: Router, public toast: HotToastService) { }
 
   ngOnInit(): void {
@@ -40,83 +41,74 @@ export class DetailsComponent implements OnInit {
 
     this.activatedRoute.params.subscribe(params => {
       this.topicId = params['topicId'];
-
-      this.topicService
-        .getOneTopic(this.topicId)
-        .then((data) => {
-          this.topic = data.data();
+      const obs = new Observable((subscriber) => {
+        subscriber.next((res) => {
+          this.topic = res.data();
           this.isOwner = this.topic.creator == this.userId;
           this.creatorEmail = this.topic.creatorEmail;
         });
+
+      });
+      from(this.topicService
+        .getOneTopic(this.topicId))
+        .subscribe(
+          res => {
+            this.topic = res.data();
+            this.isOwner = this.topic.creator == this.userId;
+            this.creatorEmail = this.topic.creatorEmail;
+          },
+          err => console.log(err),
+          () => this.hasLiked = this.topic?.likes?.find((like: string | undefined) => like === this.userId)
+        );
     });
 
     this.getComments();
-
-    setTimeout(() => {
-      this.hasLiked = this.topic?.likes?.find((like: string | undefined) => like === this.userId);
-    }, 400);
   }
 
-
-
-  async likeHandler() {
+  likeHandler() {
     const currentTopicRef = doc(this.firestore, "topics", this.topicId);
 
-    try {
-      await updateDoc(currentTopicRef, {
-        likes: arrayUnion(this.userId)
-      });
-      this.toast.success('Topic liked!');
-      setTimeout(() => {
-        this.topicService.getOneTopic(this.topicId).then((data) => {
-          this.topic = data.data();
-        })
-      }, 220);
+    from(updateDoc(currentTopicRef, {
+      likes: arrayUnion(this.userId)
+    })).subscribe();
 
-    } catch (error) {
-      console.error(error);
-    }
+    this.toast.success('Topic liked!');
+
+    this.topicService.getOneTopic(this.topicId).then((data) => {
+      this.topic = data.data();
+    });
 
     this.hasLiked = true;
   }
 
-  async cancelLikeHandler() {
+  cancelLikeHandler() {
     const currentCauseRef = doc(this.firestore, "topics", this.topicId);
 
-    try {
-      await updateDoc(currentCauseRef, {
-        likes: arrayRemove(this.userId)
-      });
-      this.toast.success('You have unliked the topic!');
-      setTimeout(() => {
-        this.topicService.getOneTopic(this.topicId).then((data) => {
-          this.topic = data.data();
-        })
-      }, 220);
+    const cancelLike$ = from(updateDoc(currentCauseRef, {
+      likes: arrayRemove(this.userId)
+    }));
+    cancelLike$.subscribe();
 
-    } catch (error) {
-      console.error(error);
-    }
+    this.toast.success('You have unliked the topic!');
 
+    const getTopic$ = from(this.topicService.getOneTopic(this.topicId));
+    getTopic$.subscribe((data) => this.topic = data.data());
     this.hasLiked = false;
-
   }
 
-  async deleteHandler() {
+  deleteHandler() {
     const answer = confirm('Are you sure you want to delete it?')
 
     if (answer) {
-      try {
-        await this.topicService.deleteTopic(this.topicId);
-        let comments: any = await this.topicService.getCommentsByTopicId(this.topicId);
-        Object.keys(comments).forEach(id => {
-          this.topicService.removeComment(id);
-        });
+      const deleteTopic$ = from(this.topicService.deleteTopic(this.topicId));
+      deleteTopic$.subscribe();
+      let comments: any = from(this.topicService.getCommentsByTopicId(this.topicId)).subscribe();
+      Object.keys(comments).forEach(id => {
+        this.topicService.removeComment(id);
+      });
 
-        this.router.navigate(['/topics']);
-      } catch (error) {
-        this.toast.error('Something went wrong!')
-      }
+      this.router.navigate(['/topics']);
+
 
       this.toast.success('Topic deleted successfully');
       this.router.navigate(['/']);
@@ -132,23 +124,16 @@ export class DetailsComponent implements OnInit {
       topicId: this.topicId
     }
 
-    try {
-      const response = this.topicService.addComment(newComment);
-      comment.reset();
-      setTimeout(() => {
-        this.getComments();
-      }, 300);
-      this.isShowedComments = true;
+    const response = this.topicService.addComment(newComment);
+    comment.reset();
+    this.getComments();
+    this.isShowedComments = true;
 
-    } catch (error) {
-      console.error(error);
-    }
   }
 
-  async getComments() {
-    setTimeout(async () => {
-      this.comments = await this.topicService.getCommentsByTopicId(this.topicId);
-    }, 10);
+  getComments() {
+    const getComments$ = from(this.topicService.getCommentsByTopicId(this.topicId));
+    getComments$.subscribe((data) => this.comments = data);
   }
 
   toggleComments() {
@@ -160,14 +145,8 @@ export class DetailsComponent implements OnInit {
   }
 
   deleteComment(commentId: string) {
-    try {
-      this.topicService.removeComment(commentId);
-      setTimeout(async () => {
-        this.comments = await this.topicService.getCommentsByTopicId(this.topicId);
-      }, 180);
-
-    } catch (error) {
-      console.error(error);
-    }
+    const getComments$ = from(this.topicService.getCommentsByTopicId(this.topicId));
+    this.topicService.removeComment(commentId);
+    getComments$.subscribe((data) => this.comments = data);
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { TopicService } from 'src/app/services/topic.service';
+import { from } from "rxjs";
 
 @Component({
   selector: 'app-home',
@@ -26,9 +27,8 @@ export class HomeComponent implements OnInit {
     this.getTopics();
   }
 
-  async getTopics() {
-    setTimeout(async () => {
-      this.topics = await this.topicService.getThreeTopics();
-    }, 50);
+  getTopics() {
+    const getTopicsHome$ = from(this.topicService.getThreeTopics());
+    getTopicsHome$.subscribe((data) => this.topics = data);
   }
 }

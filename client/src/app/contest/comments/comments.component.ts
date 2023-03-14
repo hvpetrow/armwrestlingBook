@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { TopicService } from 'src/app/services/topic.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { TopicService } from 'src/app/services/topic.service';
   templateUrl: './comments.component.html',
   styleUrls: ['./comments.component.css']
 })
-export class CommentsComponent implements OnInit {
+export class CommentsComponent implements OnChanges {
 
   @Input() commentId: any;
   @Input() comments: any;
@@ -15,13 +15,9 @@ export class CommentsComponent implements OnInit {
 
   isOwner: boolean = false;
 
-  ngOnInit(): void {
-    setTimeout(() => {
-      this.isOwner = this.comments[this.commentId].ownerId == this.user?.uid;
-    }, 150);
+  ngOnChanges(): void {
+    this.isOwner = this.comments[this.commentId].ownerId == this.user?.uid;
   }
-
-
 
   async deleteHandler() {
 
