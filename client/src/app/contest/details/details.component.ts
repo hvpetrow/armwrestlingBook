@@ -41,26 +41,21 @@ export class DetailsComponent implements OnInit {
 
     this.activatedRoute.params.subscribe(params => {
       this.topicId = params['topicId'];
-      const obs = new Observable((subscriber) => {
-        subscriber.next((res) => {
+    });
+
+    from(this.topicService
+      .getOneTopic(this.topicId))
+      .subscribe({
+        next: res => {
           this.topic = res.data();
           this.isOwner = this.topic.creator == this.userId;
           this.creatorEmail = this.topic.creatorEmail;
-        });
-
+        },
+        error: err => {
+          console.error(err.message);
+        },
+        complete: () => this.hasLiked = this.topic?.likes?.find((like: string | undefined) => like === this.userId)
       });
-      from(this.topicService
-        .getOneTopic(this.topicId))
-        .subscribe(
-          res => {
-            this.topic = res.data();
-            this.isOwner = this.topic.creator == this.userId;
-            this.creatorEmail = this.topic.creatorEmail;
-          },
-          err => console.log(err),
-          () => this.hasLiked = this.topic?.likes?.find((like: string | undefined) => like === this.userId)
-        );
-    });
 
     this.getComments();
   }
@@ -74,8 +69,11 @@ export class DetailsComponent implements OnInit {
 
     this.toast.success('Topic liked!');
 
-    this.topicService.getOneTopic(this.topicId).then((data) => {
-      this.topic = data.data();
+    from(this.topicService.getOneTopic(this.topicId)).subscribe({
+      next: data => {
+        this.topic = data.data();
+      },
+      error: err => console.error(err.message)
     });
 
     this.hasLiked = true;
@@ -87,7 +85,10 @@ export class DetailsComponent implements OnInit {
     const cancelLike$ = from(updateDoc(currentCauseRef, {
       likes: arrayRemove(this.userId)
     }));
-    cancelLike$.subscribe();
+
+    cancelLike$.subscribe({
+      error: err => console.error(err)
+    });
 
     this.toast.success('You have unliked the topic!');
 
@@ -101,8 +102,8 @@ export class DetailsComponent implements OnInit {
 
     if (answer) {
       const deleteTopic$ = from(this.topicService.deleteTopic(this.topicId));
-      deleteTopic$.subscribe();
-      let comments: any = from(this.topicService.getCommentsByTopicId(this.topicId)).subscribe();
+      deleteTopic$.subscribe({ error: err => console.error(err) });
+      let comments: any = from(this.topicService.getCommentsByTopicId(this.topicId)).subscribe({ error: err => console.error(err) });
       Object.keys(comments).forEach(id => {
         this.topicService.removeComment(id);
       });
