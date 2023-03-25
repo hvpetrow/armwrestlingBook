@@ -93,7 +93,11 @@ export class DetailsComponent implements OnInit {
     this.toast.success('You have unliked the topic!');
 
     const getTopic$ = from(this.topicService.getOneTopic(this.topicId));
-    getTopic$.subscribe((data) => this.topic = data.data());
+
+    getTopic$.subscribe({
+      next: data => this.topic = data.data(),
+      error: err => console.error(err)
+    });
     this.hasLiked = false;
   }
 
@@ -103,7 +107,9 @@ export class DetailsComponent implements OnInit {
     if (answer) {
       const deleteTopic$ = from(this.topicService.deleteTopic(this.topicId));
       deleteTopic$.subscribe({ error: err => console.error(err) });
-      let comments: any = from(this.topicService.getCommentsByTopicId(this.topicId)).subscribe({ error: err => console.error(err) });
+      let comments: any = from(this.topicService.getCommentsByTopicId(this.topicId)).subscribe({
+        error: err => console.error(err)
+      });
       Object.keys(comments).forEach(id => {
         this.topicService.removeComment(id);
       });
@@ -134,7 +140,10 @@ export class DetailsComponent implements OnInit {
 
   getComments() {
     const getComments$ = from(this.topicService.getCommentsByTopicId(this.topicId));
-    getComments$.subscribe((data) => this.comments = data);
+    getComments$.subscribe({
+      next: data => this.comments = data,
+      error: err => console.log(err)
+    });
   }
 
   toggleComments() {
@@ -148,6 +157,9 @@ export class DetailsComponent implements OnInit {
   deleteComment(commentId: string) {
     const getComments$ = from(this.topicService.getCommentsByTopicId(this.topicId));
     this.topicService.removeComment(commentId);
-    getComments$.subscribe((data) => this.comments = data);
+    getComments$.subscribe({
+      next: data => this.comments = data,
+      error: err => console.error(err)
+    });
   }
 }
